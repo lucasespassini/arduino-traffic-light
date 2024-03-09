@@ -1,0 +1,25 @@
+[package]
+name = "traffic-light"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "traffic-light"
+test = false
+bench = false
+
+[dependencies]
+panic-halt = "0.2.0"
+
+[dependencies.arduino-hal]
+git = "https://github.com/rahix/avr-hal"
+rev = "7dfa6d322b9df98b2d98afe0e14a97afe0187ac1"
+features = ["arduino-uno"]
+
+# Configure the build for minimal size - AVRs have very little program memory
+[profile.release]
+panic = "abort"
+codegen-units = 1
+debug = true
+lto = true
+opt-level = "s"
