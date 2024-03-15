@@ -1,36 +1,18 @@
-//   ___
-//    A
-// |F   B|
-//    G
-// |E   C|
-//    D
+use arduino_hal::port::mode::Output;
+use arduino_hal::port::Pin;
 
 pub struct SevenSegmentDisplay {
-    a: Pin<Output>,
-    b: Pin<Output>,
-    c: Pin<Output>,
-    d: Pin<Output>,
-    e: Pin<Output>,
-    f: Pin<Output>,
-    g: Pin<Output>,
-    dp: Pin<Output>,
+    pub a: Pin<Output>,
+    pub b: Pin<Output>,
+    pub c: Pin<Output>,
+    pub d: Pin<Output>,
+    pub e: Pin<Output>,
+    pub f: Pin<Output>,
+    pub g: Pin<Output>,
+    pub dp: Pin<Output>,
 }
 
 impl SevenSegmentDisplay {
-    pub fn new(pins: arduino_hal::Pins) -> Self {
-        SevenSegmentDisplay {
-            a: pins.d10.into_output(),
-            b: pins.d11.into_output(),
-            c: pins.d6.into_output(),
-            d: pins.d5.into_output(),
-            e: pins.d4.into_output(),
-            f: pins.d9.into_output(),
-            g: pins.d8.into_output(),
-            dp: pins.d7.into_output(),
-        }
-    }
-
-    // Função para acender um segmento específico
     pub fn light_segment(&mut self, segment: char) {
         match segment {
             'a' => self.a.set_high(),
@@ -44,7 +26,6 @@ impl SevenSegmentDisplay {
         }
     }
 
-    // Função para apagar todos os segmentos
     pub fn clear(&mut self) {
         self.a.set_low();
         self.b.set_low();
@@ -53,5 +34,89 @@ impl SevenSegmentDisplay {
         self.e.set_low();
         self.f.set_low();
         self.g.set_low();
+    }
+
+    //   ___
+    //    A
+    // |F   B|
+    //    G
+    // |E   C|
+    //    D
+
+    pub fn digit_0(&mut self) {
+        self.clear();
+        self.light_segment('a');
+        self.light_segment('b');
+        self.light_segment('c');
+        self.light_segment('d');
+        self.light_segment('e');
+        self.light_segment('f');
+    }
+
+    pub fn digit_1(&mut self) {
+        self.clear();
+        self.light_segment('b');
+        self.light_segment('c');
+    }
+
+    pub fn digit_2(&mut self) {
+        self.clear();
+        self.light_segment('a');
+        self.light_segment('b');
+        self.light_segment('g');
+        self.light_segment('e');
+        self.light_segment('d');
+    }
+
+    pub fn digit_3(&mut self) {
+        self.digit_1();
+        self.light_segment('a');
+        self.light_segment('g');
+        self.light_segment('d');
+    }
+
+    pub fn digit_4(&mut self) {
+        self.digit_1();
+        self.light_segment('f');
+        self.light_segment('g');
+    }
+
+    pub fn digit_5(&mut self) {
+        self.clear();
+        self.light_segment('a');
+        self.light_segment('f');
+        self.light_segment('g');
+        self.light_segment('c');
+        self.light_segment('d');
+    }
+
+    pub fn digit_6(&mut self) {
+        self.digit_8();
+        self.b.set_low();
+    }
+
+    pub fn digit_7(&mut self) {
+        self.digit_1();
+        self.light_segment('a');
+    }
+
+    pub fn digit_8(&mut self) {
+        self.digit_0();
+        self.light_segment('g');
+    }
+    //   ___
+    //    A
+    // |F   B|
+    //    G
+    // |E   C|
+    //    D
+    pub fn digit_9(&mut self) {
+        self.clear();
+        self.light_segment('a');
+        self.light_segment('b');
+        self.light_segment('c');
+        self.light_segment('d');
+        self.light_segment('g');
+        self.light_segment('f');
     }
 }
